@@ -1,5 +1,9 @@
 ///////////////////////////
-//模块名：def.vh
+//文件名名：def.vh
+//
+//创建日期：2022-7-22
+//最后修改日期: 2022-7-22
+//
 //记录所有的宏
 //
 ////////////////////////
@@ -14,6 +18,12 @@
 
 `define ENABLE 1'b1
 `define DISABLE 1'b0
+
+`define REG_ADDR_BUS 4:0
+`define INST_BUS 31:0
+`define DATA_BUS 31:0
+
+
 
 //EXTop itype, stype, btype, utype, jtype
 `define EXT_CTRL_NONE 6'b000000
@@ -57,6 +67,7 @@
 `define ALUOP_bltu 5'b10110
 `define ALUOP_bgeu 5'b10111
 
+/*
 
 //mem
 //DMwidth
@@ -78,3 +89,5 @@
 `define RFW_FROM_MEM 2'b01
 `define RFW_FROM_PC 2'b10
 `define RFW_NONE 2'b11
+
+*/

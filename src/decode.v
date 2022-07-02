@@ -5,17 +5,15 @@
 //模块名：DECODE
 //创建日期：2022-7-22
 //最后修改日期: 2022-7-22
-//解码
 //
+//用于解码
+//产生控制型号，将立即数扩展为32位
 //
 //////////////////////////
 
-
 module DECODE(
-    input clk,
     input [31:0] inst,
-    output decode_out//TODO: 信号定义
+    output decode_out//TODO:具体信号：未定义
 );
-
 
 endmodule

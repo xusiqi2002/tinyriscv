@@ -27,9 +27,9 @@ module INST_BUF(
 
 
     input branch_flag,
-    input branch_pc,//具体有待定义，用于清空一部分指令
+    input branch_pc,//TODO:具体有待定义，用于清空一部分指令
 
-    output instbuf_full//具体有待定义，送出表示当前状态的指令送给if,用于确定是否取指
+    output instbuf_full//TODO:具体有待定义，送出表示当前状态的指令送给if,用于确定是否取指
 );
 
 
