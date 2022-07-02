@@ -10,17 +10,17 @@
 //取值模块
 //
 //////////////////////////
-
+`include "def.vh"
 module IF(
-    output [31:0] inst_addr_out,//取值的地址，与实际地址不同
+    output [`INST_ADDR_BUS] inst_addr_out,//取值的地址，与实际地址不同
     input branch_pre_re,//跳转的预测结果，用于分支预测，位数未定
 
     input branch_flag,
-    input [31:0] branch_addr
+    input [`PC_BUS] branch_addr
 );
 
 
-    reg [31:0] PC;
+    reg [`PC_BUS] PC;
 
     MINI_DECODE MDECODE1(
 
@@ -45,9 +45,9 @@ endmodule
 //只产生
 
 module MINI_DECODE(
-    input [31:0] inst,
+    input [`INST_BUS] inst,
     output br_flag,
-    output [31:0] br_address
+    output [`PC_BUS] br_address
 );
 
 

@@ -19,9 +19,13 @@
 `define ENABLE 1'b1
 `define DISABLE 1'b0
 
+//数据宽度
 `define REG_ADDR_BUS 4:0
 `define INST_BUS 31:0
 `define DATA_BUS 31:0
+`define INST_ADDR_BUS 31:0
+`define PC_BUS 31:0
+`define MEM_ADDR_BUS 31:0
 
 
 
