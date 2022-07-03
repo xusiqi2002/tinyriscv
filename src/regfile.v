@@ -36,6 +36,24 @@ module RF(
     input [`DATA_BUS] wdata2
 
 );
+    integer i;
+    reg [31:0] rf[31:0];
 
+    always @(negedge clk, posedge rst)
+    if (rst) begin    //  reset
+        for (i=1; i<32; i=i+1)
+            rf[i] = 0; //  i;
+    end 
+    else begin
+        if (we1 && waddr1!=0) 
+            rf[waddr1] = wdata1;
+	    if(we2 && waddr2!=0) 
+            rf[waddr2] = wdata2;
+    end
+    
+    assign rdata1 = (raddr1 != 0) ? rf[raddr1] : 0;
+    assign rdata2 = (raddr2 != 0) ? rf[raddr2] : 0;
+    assign rdata3 = (raddr3 != 0) ? rf[raddr3] : 0;
+    assign rdata4 = (raddr4 != 0) ? rf[raddr4] : 0;
 
 endmodule
