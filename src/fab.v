@@ -15,20 +15,22 @@
 module FAB(
 
     input clk,
-    input rst,
+    input rst_s1,
     input stop,//可扩展
 
     input num_in,//一个顺序编号，用于确定在同时进行的两条指令的顺序
     input [`PC_BUS] pc,//pc
     input [`PC_BUS] npc,//next pc
-    input [71:0] decode_out,//decode 产生的控制信号具体未定义
+    input [`DECODEOUT_BUS] decode_out,//decode 产生的控制信号具体未定义
     input [`DATA_BUS] rfrdata1,
     input [`DATA_BUS] rfrdata2,
 
+    output  branch_num,
     output reg isbranch_pre,
     output reg branch_flag,//跳转信号
     output reg [`PC_BUS] branch_address,//跳转地址
 
+    //TODO: 需要传出中间的寄存器写信号用于数据冒险
 
     output num_out,
     output rfwe,//
@@ -115,12 +117,12 @@ module FAB(
         endcase
     end
 
-
+    assign branch_num = num_in;
 //流水线寄存器
 
     FAB_PLREG REG1(
         .clk(clk),
-        .rst(rst),
+        .rst(rst_s1),
         .stop(stop),
         .num_in(num_in),
         .num_out(num_out),

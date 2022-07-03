@@ -4,8 +4,8 @@
 //文件名：inst_buf.v
 //模块名:INST_BUF
 //
-//创建日期：2022-7-22
-//最后修改日期: 2022-7-22
+//创建日期：2022-7-2
+//最后修改日期: 2022-7-3
 //
 //
 //指令缓存
@@ -16,31 +16,33 @@
 `include "def.vh"
 module INST_BUF(
     input clk,
-    input rst,
+    input rst,//清空
     input stop,
 
     input [`INST_BUS] in1_inst,
     input [`PC_BUS] in1_pc,
     input [`PC_BUS] in1_npc,
+    input receive_flag1,//从if传来
 
     input [`INST_BUS] in2_inst,
     input [`PC_BUS] in2_pc,
     input [`PC_BUS] in2_npc,
+
+    input receive_flag2,//从if传来
     
-    input [`INST_BUS] out1_inst,
-    input [`PC_BUS] out1_pc,
-    input [`PC_BUS] out11_npc,
+    output [`INST_BUS] out1_inst,
+    output [`PC_BUS] out1_pc,
+    output [`PC_BUS] out1_npc,
+    
+    output sendout_flag1,
 
-    input [`INST_BUS] out2_inst,
-    input [`PC_BUS] out2_pc,
-    input [`PC_BUS] out2_npc,
+    output [`INST_BUS] out2_inst,
+    output [`PC_BUS] out2_pc,
+    output [`PC_BUS] out2_npc,
 
+    output sendout_flag2,
 
-//TODO:具体有待定义，用于清空一部分指令,不一定需要
-    input branch_flag,
-    input [`PC_BUS]branch_pc,
-
-    output instbuf_full//TODO:具体有待定义，送出表示当前状态的指令送给if,用于确定是否取指
+    output instbuf_full//具体有待定义，送出表示当前状态的指令送给if,用于确定是否取指
 
 );
 //对于顺序发射,能否跳转时直接清空？

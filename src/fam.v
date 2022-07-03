@@ -14,16 +14,18 @@
 
 module FAM(
     input clk,
-    input rst,
+    input rst_s1,
+    input stop,
 
     input num_in,//用于确认该指令在并行的两条指令中的顺序
     input [`PC_BUS] pc,//pc
     //input [`PC_BUS] npc,//next pc
     input [`DATA_BUS] imm,//立即数
-    input [71:0] decode_out,//decode 产生的控制信号具体未定义
+    input [`DECODEOUT_BUS] decode_out,//decode 产生的控制信号具体未定义
     output [`DATA_BUS] rfrdata1,
     output [`DATA_BUS] rfrdata2,
 
+    //TODO: 需要传出中间的寄存器写信号用于数据冒险
 
 
     output reg mem_w,
@@ -105,7 +107,7 @@ module FAM(
 //流水线寄存器
     FAM_PLREG PR1(
         .clk(clk),
-        .rst(rst),
+        .rst(rst_s1),
         .stop(stop),
         .DMWe(DMWe),
         .mem_DMWe(mem_DMWe),
@@ -134,7 +136,6 @@ module FAM(
 
     reg [31:0] dmout;
 
-    //TODO:
     wire [31:0] _Data_in;
     assign _Data_in = Data_in >> (Addr_out[1:0] * 8);
 
@@ -181,6 +182,8 @@ module FAM_PLREG(
     input clk,
     input rst,
     input stop,
+    input num_in,
+    output reg num_out,
     input DMWe,
     output reg mem_DMWe,
     input DMsign,
@@ -204,6 +207,7 @@ module FAM_PLREG(
     always @ (posedge clk)
     if(rst)
     begin
+        num_out <= 0;
         mem_DMWe <= `DISABLE;
         mem_DMsign <= 1'b0;
         mem_DMwidth <= 2'b0;
@@ -216,6 +220,7 @@ module FAM_PLREG(
     end
     else if(stop)
     begin
+        num_out <= num_out;
         mem_DMWe <= mem_DMWe;
         mem_DMsign <= mem_DMsign;
         mem_DMwidth <= mem_DMwidth;
@@ -228,6 +233,7 @@ module FAM_PLREG(
     end
     else
     begin
+        num_out <= num_in;
         mem_DMWe <= DMWe;
         mem_DMsign <= DMsign;
         mem_DMwidth <= DMwidth;

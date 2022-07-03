@@ -26,6 +26,7 @@
 `define INST_ADDR_BUS 31:0
 `define PC_BUS 31:0
 `define MEM_ADDR_BUS 31:0
+`define DECODEOUT_BUS 71:0
 
 
 
