@@ -12,7 +12,19 @@
 //////////////////////////
 `include "def.vh"
 module IF(
+    input clk,
+    input rst,
+
     output [`INST_ADDR_BUS] inst_addr_out,//取值的地址，与实际地址不同
+
+    output [`PC_BUS] out1_pc,
+    output [`PC_BUS] out1_npc,
+    output [`INST_BUS] out1_inst,
+    
+    output [`PC_BUS] out2_pc,
+    output [`PC_BUS] out2_npc,
+    output [`INST_BUS] out2_inst,
+
     input branch_pre_re,//跳转的预测结果，用于分支预测，位数未定
 
     input branch_flag,
@@ -46,6 +58,8 @@ endmodule
 
 module MINI_DECODE(
     input [`INST_BUS] inst,
+
+
     output br_flag,
     output [`PC_BUS] br_address
 );
@@ -57,11 +71,12 @@ endmodule
 //模块名：BRANCH_PREDICT
 //用于分支预测
 module BRANCH_PREDICT(
+    input clk,
     input branch_flag,
     input branch_pre_re,
     //branch_flag, branch_pre_re显示之前的预测结果是否正确，用于分支预测
     
-    output br_flag_pre
+    output br_flag_pre//产生一个信号,用于预测跳转是否发生
 );
 
 
