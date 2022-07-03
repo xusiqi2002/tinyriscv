@@ -12,7 +12,7 @@
 module SCPU(
     input clk,            // clock
     input reset,          // reset
-    output [31:0] inst_addr_out,// TODO: 待修改
+    output [31:0] inst_addr_out,
     input [63:0] inst_in,     //一次存取两条指令
    
 
@@ -44,12 +44,14 @@ module SCPU(
 
 //解码模块1
     DECODE DECODE_1(
-
+        .inst(),
+        .decode_out()
     );
 
 //解码模块2
     DECODE DECODE_2(
-
+        .inst(),
+        .decode_out()
     );
 
 //对解码的输出进行选择，送入执行阶段
@@ -57,15 +59,46 @@ module SCPU(
 
     );
 
-
+//decode和excute之间的流水线寄存器
     RLREG_DE_EX PRDEEX1(
-
+        .clk(clk),
+        .rst(),
+        .stop(),
+        .num_in(),
+        .num_out(),
+        .pc_in(),//pc
+        .pc_out(),//pc
+        .npc_in(),//next pc
+        .npc_out(),//next pc
+        .decode_out_in(),
+        .decode_out_out(),
+        .rfrdata1_in(),
+        .rfrdata1_out(),
+        .rfrdata2_in(),
+        .rfrdata2_out()
     );
 
     
     RLREG_DE_EX PRDEEX2(
-
+        .clk(clk),
+        .rst(),
+        .stop(),
+        .num_in(),
+        .num_out(),
+        .pc_in(),//pc
+        .pc_out(),//pc
+        .npc_in(),//next pc
+        .npc_out(),//next pc
+        .decode_out_in(),
+        .decode_out_out(),
+        .rfrdata1_in(),
+        .rfrdata1_out(),
+        .rfrdata2_in(),
+        .rfrdata2_out()
     );
+
+
+
 //执行模块1,
 //支持运算和跳转
     FAB EXC1(
@@ -78,7 +111,7 @@ module SCPU(
 
 
 //执行模块2
-//支持运算和fangcun
+//支持运算和访存
 
     FAM EXC2(
 
@@ -161,13 +194,19 @@ module RLREG_DE_EX(
     begin
         if(rst)
         begin
+            num_out <= 1'b0;
+            pc_out <= `PC_INITIAL;//pc
+            npc_out <= `NPC_INITIAL;//next pc
+            decode_out_out <= `DECODEOUTLEN'b0;
+            rfrdata1_out <= `DATA_INITIAL;
+            rfrdata2_out <= `DATA_INITIAL;
         end
         else if(stop)
         begin
             num_out <= num_out;
             pc_out <= pc_out;//pc
             npc_out <= npc_out;//next pc
-            decode_out_decode_out_out;
+            decode_out_out <= decode_out_out;
             rfrdata1_out <= rfrdata1_out;
             rfrdata2_out <= rfrdata2_out;
         end
@@ -176,7 +215,7 @@ module RLREG_DE_EX(
             num_out <= num_in;
             pc_out <= pc_in;//pc
             npc_out <= npc_in;//next pc
-            decode_out_decode_out_in;
+            decode_out_out <= decode_out_in;
             rfrdata1_out <= rfrdata1_in;
             rfrdata2_out <= rfrdata2_in;
         end

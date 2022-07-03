@@ -1,8 +1,8 @@
 ///////////////////////////
 //文件名名：def.vh
 //
-//创建日期：2022-7-22
-//最后修改日期: 2022-7-22
+//创建日期：2022-7-2
+//最后修改日期: 2022-7-4
 //
 //记录所有的宏
 //
@@ -27,6 +27,7 @@
 `define PC_BUS 31:0
 `define MEM_ADDR_BUS 31:0
 `define DECODEOUT_BUS 64:0
+`define DECODEOUTLEN 65
 
 //INSTTYPE
 `define INSTTYPE_AL 2'b00
