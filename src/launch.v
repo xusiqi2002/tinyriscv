@@ -16,11 +16,11 @@ module LAUNCH_SELECT(
 
     input [`PC_BUS] in1_pc,
     input [`PC_BUS] in1_npc,
-    input [71:0] in1_decodeout,
+    input [`DECODEOUT_BUS] in1_decodeout,
     
     input [`PC_BUS] in2_pc,
     input [`PC_BUS] in2_npc,
-    input [71:0] in2_decodeout,
+    input [`DECODEOUT_BUS] in2_decodeout,
 
 
 //传给第一个执行模块的输出

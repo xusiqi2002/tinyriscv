@@ -26,9 +26,12 @@
 `define INST_ADDR_BUS 31:0
 `define PC_BUS 31:0
 `define MEM_ADDR_BUS 31:0
-`define DECODEOUT_BUS 71:0
+`define DECODEOUT_BUS 64:0
 
-
+//INSTTYPE
+`define INSTTYPE_AL 2'b00
+`define INSTTYPE_BR 2'b01
+`define INSTTYPE_AG 2'b10
 
 //EXTop itype, stype, btype, utype, jtype
 `define EXT_CTRL_NONE 6'b000000

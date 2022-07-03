@@ -45,7 +45,7 @@ module FAB(
     wire [`REG_ADDR_BUS] rt;
     wire [`REG_ADDR_BUS] rd;
     wire [`DATA_BUS]immout;//产生的立即数
-    wire [5:0] EXTop;    // control signal to signed extension
+    //wire [5:0] EXTop;    // control signal to signed extension
     wire [2:0] NPCop;    // next pc operation
     wire ALUsrc;   // ALU source for A
     wire [4:0] ALUop;    // ALU opertion
@@ -56,12 +56,12 @@ module FAB(
     wire [1:0] RFWsrc;//0:aluwire 1:datamemory
 
     assign {
-        InstType[2:0],
+        InstType[1:0],
         rs[`REG_ADDR_BUS],
         rt[`REG_ADDR_BUS],
         rd[`REG_ADDR_BUS],
         immout[`DATA_BUS],
-        EXTop[5:0],
+        //EXTop[5:0],
         NPCop[2:0],
         ALUsrc,
         ALUop[4:0],

@@ -44,12 +44,12 @@ module FAM(
 );
 
 
-    wire [2:0] InstType;
+    wire [1:0] InstType;
     wire [`REG_ADDR_BUS] rs;
     wire [`REG_ADDR_BUS] rt;
     wire [`REG_ADDR_BUS] rd;
     wire [`DATA_BUS]immout;//产生的立即数
-    wire [5:0] EXTop;    // control signal to signed extension
+    //wire [5:0] EXTop;    // control signal to signed extension
     wire [2:0] NPCop;    // next pc operation
     wire ALUsrc;   // ALU source for A
     wire [4:0] ALUop;    // ALU opertion
@@ -65,7 +65,7 @@ module FAM(
         rt[`REG_ADDR_BUS],
         rd[`REG_ADDR_BUS],
         immout[`DATA_BUS],
-        EXTop[5:0],
+        //EXTop[5:0],
         NPCop[2:0],
         ALUsrc,
         ALUop[4:0],

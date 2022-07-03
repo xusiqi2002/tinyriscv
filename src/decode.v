@@ -15,7 +15,7 @@ module DECODE(
     input [`INST_BUS] inst,
     
     //以下为控制信号decode out
-    output [71:0]decode_out
+    output [`DECODEOUT_BUS]decode_out
 );
     wire  [6:0] Op; // opcode,
     wire [6:0] Funct7;   // funct7
@@ -37,7 +37,7 @@ module DECODE(
     assign uimm=inst[31:12];
     assign jimm={inst[31],inst[19:12],inst[20],inst[30:21]};
 
-    wire [2:0] InstType;
+    wire [1:0] InstType;
     wire [`REG_ADDR_BUS] rs;
     wire [`REG_ADDR_BUS] rt;
     wire [`REG_ADDR_BUS] rd;
@@ -118,6 +118,14 @@ module DECODE(
     wire i_jal  = Op[6]& Op[5]&~Op[4]& Op[3]& Op[2]& Op[1]& Op[0];  // jal 1101111
 
   
+
+    
+    //INSTTYPE_AL 2'b00
+    //INSTTYPE_BR 2'b01
+    //INSTTYPE_AG 2'b10
+    assign InstType[0] = sbtype | i_jal | i_jalr;
+    assign InstType[1] = stype | itype_l;
+
   // signed extension
   // EXT_CTRL_ITYPE_SHAMT 6'b100000
   // EXT_CTRL_ITYPE	      6'b010000
@@ -166,12 +174,12 @@ module DECODE(
     EXT U_ext(iimm_shamt,iimm,simm,bimm,uimm,jimm,EXTop,immout);
 
     assign decode_out = {
-        InstType[2:0],
+        InstType[1:0],
         rs[`REG_ADDR_BUS],
         rt[`REG_ADDR_BUS],
         rd[`REG_ADDR_BUS],
         immout[`DATA_BUS],
-        EXTop[5:0],
+        //EXTop[5:0],
         NPCop[2:0],
         ALUsrc,
         ALUop[4:0],
@@ -185,13 +193,13 @@ module DECODE(
 endmodule
 
 module EXT( 
-	input 	[4:0]          iimm_shamt,//instrD[24,20], 5 bits  
-   	input	[11:0]			iimm,      //instr[31:20], 12 bits   
+	input  [4:0]      iimm_shamt,//instrD[24,20], 5 bits  
+  input	[11:0]			iimm,      //instr[31:20], 12 bits   
 	input	[11:0]			simm,      //instr[31:25, 11:7], 12 bits   
 	input	[11:0]			bimm,      //instrD[31], instrD[7], instrD[30:25], instrD[11:8], 12 bits  
 	input	[19:0]			uimm,      //instrD[31,12], 20 bits  
 	input	[19:0]			jimm,      //instrD[31],instrD[19,12],instrD[20],instrD[30,21], 20 bits
-	input	[5:0]			EXTOp,
+	input	 [5:0]			EXTOp,
 
 	output reg [31:0] 	immout
 	);
