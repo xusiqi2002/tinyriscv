@@ -17,19 +17,31 @@
 module INST_BUF(
     input clk,
     input rst,
-    input [`INST_BUS] inst_in1,
-    input [`INST_BUS] inst_in2,
-    output [`INST_BUS] inst_out1,
-    output [`INST_BUS] inst_out2,
+    input stop,
 
-    input [`PC_BUS] inst_pc1,//TODO: 用于在预测错误时清除：是pc还是时间戳？
-    input [`PC_BUS] inst_pc2,
+    input [`INST_BUS] in1_inst,
+    input [`PC_BUS] in1_pc,
+    input [`PC_BUS] in1_npc,
+
+    input [`INST_BUS] in2_inst,
+    input [`PC_BUS] in2_pc,
+    input [`PC_BUS] in2_npc,
+    
+    input [`INST_BUS] out1_inst,
+    input [`PC_BUS] out1_pc,
+    input [`PC_BUS] out11_npc,
+
+    input [`INST_BUS] out2_inst,
+    input [`PC_BUS] out2_pc,
+    input [`PC_BUS] out2_npc,
 
 
+//TODO:具体有待定义，用于清空一部分指令,不一定需要
     input branch_flag,
-    input [`PC_BUS]branch_pc,//TODO:具体有待定义，用于清空一部分指令
+    input [`PC_BUS]branch_pc,
 
     output instbuf_full//TODO:具体有待定义，送出表示当前状态的指令送给if,用于确定是否取指
+
 );
 //对于顺序发射,能否跳转时直接清空？
 

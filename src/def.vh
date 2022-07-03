@@ -71,7 +71,6 @@
 `define ALUOP_bltu 5'b10110
 `define ALUOP_bgeu 5'b10111
 
-/*
 
 //mem
 //DMwidth
@@ -87,11 +86,9 @@
 `define DM_WORD_SIGNED 3'b010
 `define DM_WORD_UNSIGNED 3'b110
 
-//wb
+
 //RFWsrc
 `define RFW_FROM_ALU 2'b00
 `define RFW_FROM_MEM 2'b01
 `define RFW_FROM_PC 2'b10
 `define RFW_NONE 2'b11
-
-*/
