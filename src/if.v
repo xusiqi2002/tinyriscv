@@ -5,7 +5,7 @@
 //模块名:IF
 //
 //创建日期：2022-7-2
-//最后修改日期: 2022-7-2
+//最后修改日期: 2022-7-4
 //
 //取指模块
 //
@@ -102,21 +102,21 @@ endmodule
 module MINI_DECODE(
     input [`INST_BUS] inst,
     input [`PC_BUS] PC,
-    output br_flag,
-    output jump_flag,
-    output [`PC_BUS] br_address
+    output reg br_flag,
+    output reg jump_flag,
+    output reg [`PC_BUS] br_address
 );
-    reg br_flag;
-    reg [`PC_BUS] br_address;
-    always@*
+    //reg br_flag;
+    //reg [`PC_BUS] br_address;
+    always@(*)
     begin
         if(inst[6:0]==7'b1100011) begin//btype
             br_flag<=1'b1;
-            br_address<=PC+{{{32-13}{inst[31]}},{insr[31],inst[7],inst[30:25],inst[11:8]}, 1'b0};
+            br_address<=PC+{{{32-13}{inst[31]}},{inst[31],inst[7],inst[30:25],inst[11:8]}, 1'b0};
         end
         else if(inst[6:0]==7'b1101111) begin//jal
             jump_flag<=1'b1;
-            br_address<=PC+{{{32-21}{inst[31]}},{inst[31],inst[19,12],inst[20],inst[30,21]}, 1'b0};
+            br_address<=PC+{{{32-21}{inst[31]}},{inst[31],inst[19:12],inst[20],inst[30:21]}, 1'b0};
         end
         else begin//not jump
             br_flag<=1'b0;
