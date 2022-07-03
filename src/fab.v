@@ -25,7 +25,7 @@ module FAB(
     input [`DATA_BUS] rfrdata1,
     input [`DATA_BUS] rfrdata2,
 
-    output reg is_branch,
+    output reg isbranch_pre,
     output reg branch_flag,//跳转信号
     output reg [`PC_BUS] branch_address,//跳转地址
 
@@ -72,6 +72,7 @@ module FAB(
 
 
     reg [`DATA_BUS] rfwdata1;
+    wire [31:0] aluout;
 
 
      wire Zero;
@@ -102,7 +103,7 @@ module FAB(
             default: branch_address = npc;
         endcase
         branch_flag <= (branch_address != npc);
-        is_branch <= (NPCop == `NPC_BRANCH);
+        isbranch_pre <= (NPCop == `NPC_BRANCH);
 
 
         case (RFWsrc)
