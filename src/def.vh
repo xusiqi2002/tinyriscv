@@ -21,10 +21,10 @@
 
 `define RFW_BUS 38:0
 `define RFW_LEN 38
-`define RFWE 0
-`define RFWC 1
-`define RFWA 6:2
-`define RFWD 38:7
+`define RFWE 38
+`define RFWC 37
+`define RFWA 36:32
+`define RFWD 31:0
 `define RFW_INITIAL {`DISABLE,`DISABLE,5'b00000,`DATA_INITIAL}
 
 
