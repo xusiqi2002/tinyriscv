@@ -17,10 +17,22 @@ module LAUNCH_SELECT(
     input [`PC_BUS] in1_pc,
     input [`PC_BUS] in1_npc,
     input [`DECODEOUT_BUS] in1_decodeout,
+    input receive_flag1,
     
     input [`PC_BUS] in2_pc,
     input [`PC_BUS] in2_npc,
     input [`DECODEOUT_BUS] in2_decodeout,
+    input receive_flag2,
+
+    input [`DATA_BUS] rfrd1,
+    input [`DATA_BUS] rfrd2,
+    input [`DATA_BUS] rfrd3,
+    input [`DATA_BUS] rfrd4,
+
+    input [`RFW_BUS] rfw1_s1,
+    input [`RFW_BUS] rfw2_s1,
+    input [`RFW_BUS] rfw1_s2,
+    input [`RFW_BUS] rfw2_s2,
 
 
 //传给第一个执行模块的输出
@@ -43,6 +55,11 @@ module LAUNCH_SELECT(
     output [3:0]l_flag //用于展示是否送入执行模块以及送入那个执行模块，待改变
 
 );
+//线判断两条指令得寄存器读是否准备好
+
+
+
+
 
 
 
