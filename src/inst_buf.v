@@ -35,12 +35,14 @@ module INST_BUF(
     output [`PC_BUS] out1_npc,
     
     output sendout_flag1,
+    input launch_flag1,
 
     output [`INST_BUS] out2_inst,
     output [`PC_BUS] out2_pc,
     output [`PC_BUS] out2_npc,
 
     output sendout_flag2,
+    input launch_flag2,
 
     output instbuf_full//具体有待定义，送出表示当前状态的指令送给if,用于确定是否取指
 
