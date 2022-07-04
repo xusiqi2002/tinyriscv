@@ -28,8 +28,8 @@ module RF(
     always @ (*)
     if(rfwe_in1 & rfwe_in2 & (rfwaddr_in1 == rfwaddr_in2))
     begin
-        rfwe_out1 <= ~num_in1;
-        rfwe_out2 <= ~num_in2;
+        rfwe_out1 <= num_in1;
+        rfwe_out2 <= num_in2;
     end
     else
     begin
