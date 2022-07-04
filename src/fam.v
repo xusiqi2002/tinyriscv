@@ -48,6 +48,8 @@ module FAM(
     wire [`REG_ADDR_BUS] rs;
     wire [`REG_ADDR_BUS] rt;
     wire [`REG_ADDR_BUS] rd;
+    wire rs_v;
+    wire rt_v;
     wire [`DATA_BUS]immout;//产生的立即数
     //wire [5:0] EXTop;    // control signal to signed extension
     wire [2:0] NPCop;    // next pc operation
@@ -64,6 +66,8 @@ module FAM(
         rs[`REG_ADDR_BUS],
         rt[`REG_ADDR_BUS],
         rd[`REG_ADDR_BUS],
+        rs_v,
+        rt_v,
         immout[`DATA_BUS],
         //EXTop[5:0],
         NPCop[2:0],

@@ -35,8 +35,25 @@
 `define INST_ADDR_BUS 31:0
 `define PC_BUS 31:0
 `define MEM_ADDR_BUS 31:0
-`define DECODEOUT_BUS 64:0
-`define DECODEOUTLEN 65
+
+
+`define DECODEOUT_BUS 66:0
+`define DECODEOUTLEN 67
+`define DC_INSTTYPE 66:65
+`define DC_RS 64:60
+`define DC_RT 59:55
+`define DC_RD 54:50
+`define DC_RSV 49
+`define DC_RTV 48
+`define DC_IMM 47:16
+`define DC_NPCOP 15:13
+`define DC_ALUSRC 12
+`define DC_ALUOP 11:7
+`define DC_DMWE 6
+`define DC_DMSIGN 5
+`define DC_DMWIDTH 4:3
+`define DC_RFWE 2
+`define DC_RFWSRC 1:0 
 
 //INSTTYPE
 `define INSTTYPE_AL 2'b00
