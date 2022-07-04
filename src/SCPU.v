@@ -165,6 +165,24 @@ module SCPU(
 
 //32个通用寄存器
     RF U_RF(
+        .clk(),
+        .rst(),
+
+        .raddr1(),
+        .rdata1(),
+        .raddr2(),
+        .rdata2(),
+        .raddr3(),
+        .rdata3(),
+        .raddr4(),
+        .rdata4(),
+
+        .we1(),
+        .waddr1(),
+        .wdata1(),
+        .we2(),
+        .waddr2(),
+        .wdata2()
     );
 
 

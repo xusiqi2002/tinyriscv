@@ -19,6 +19,15 @@
 `define ENABLE 1'b1
 `define DISABLE 1'b0
 
+`define RFW_BUS 38:0
+`define RFW_LEN 38
+`define RFWE 0
+`define RFWC 1
+`define RFWA 6:2
+`define RFWD 38:7
+`define RFW_INITIAL {`DISABLE,`DISABLE,5'b00000,`DATA_INITIAL}
+
+
 //数据宽度
 `define REG_ADDR_BUS 4:0
 `define INST_BUS 31:0
