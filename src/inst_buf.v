@@ -4,8 +4,8 @@
 //文件名：inst_buf.v
 //模块名:INST_BUF
 //
-//创建日期：2022-7-22
-//最后修改日期: 2022-7-22
+//创建日期：2022-7-2
+//最后修改日期: 2022-7-5
 //
 //
 //指令缓存
@@ -31,18 +31,18 @@ module INST_BUF(
     input [`PC_BUS] in2_npc,
     //input receive_flag2,//从if传来
     
-    output [`INST_BUS] out1_inst,
-    output [`PC_BUS] out1_pc,
-    output [`PC_BUS] out1_npc,
-    output sendout_flag1,
+    output reg [`INST_BUS] out1_inst,
+    output reg [`PC_BUS] out1_pc,
+    output reg [`PC_BUS] out1_npc,
+    output reg sendout_flag1,
     input isbranch1,
     input br_taken1,
 
-    output [`INST_BUS] out2_inst,
-    output [`PC_BUS] out2_pc,
-    output [`PC_BUS] out2_npc,
+    output reg [`INST_BUS] out2_inst,
+    output reg [`PC_BUS] out2_pc,
+    output reg [`PC_BUS] out2_npc,
 
-    output sendout_flag2,
+    output reg sendout_flag2,
     input  isbranch2,
     input  br_taken2,
 
@@ -51,29 +51,31 @@ module INST_BUF(
 );
 //对于顺序发射,能否跳转时直接清空？
 
-    reg sendout_flag1,sendout_flag2;
+    //reg sendout_flag1,sendout_flag2;
     reg [97:0] inst[0:3];//inst[97]=isbranch,inst[96]=br_taken,inst[95:64]=pc,inst[63:32]=npc,inst[31:0]=inst
     wire [97:0] null_inst;
     assign null_inst=98'b0;
 
     assign instbuf_full=(inst[3]!=null_inst) ? 1'b1 : 1'b0 ;
 
+    integer i;
+
     always@(posedge clk,posedge rst)
     begin
         if(rst) begin
-            for(i=0;i<4;i++)
+            for(i=0;i<4;i = i + 1)
                 inst[i]=null_inst;
         end
         else begin
             if(!instbuf_full)
                 case(issue)
                     2'b01: begin
-                        for(i=0;i<4;i++)
+                        for(i=0;i<4;i = i + 1)
                             if(inst[i]==null_inst)
                                 inst[i]={isbranch1,br_taken1,in2_pc,in2_npc,in2_inst};
                     end
                     2'b11: begin
-                        for(i=0;i<4;i++)
+                        for(i=0;i<4;i = i + 1)
                             if(inst[i]==null_inst && i<3) begin
                                 inst[i]={isbranch1,br_taken1,in1_pc,in1_npc,in1_inst};
                                 inst[i+1]={isbranch2,br_taken2,in2_pc,in2_npc,in2_inst};
@@ -82,19 +84,20 @@ module INST_BUF(
                 endcase
         end
     end
+    
 
     always@*
     begin
         if(inst[0][97:96]==2'b11) begin//inst[0]是branch指令且预测发生跳转
             sendout_flag1=1'b1;
             sendout_flag2=1'b0;
-            for(i=1;i<4;i++)
+            for(i=1; i<4; i = i + 1)
                 inst[i]<=null_inst;
         end
         else if(inst[1][97:96]==2'b11) begin//inst[1]是branch指令且预测发生跳转
             sendout_flag1=1'b1;
             sendout_flag2=1'b1;
-            for(i=2;i<4;i++)
+            for(i=2;i<4;i = i + 1)
                 inst[i]<=null_inst;
         end
         else if(inst[0][97]==1'b1 && inst[1][97]==1'b1) begin//

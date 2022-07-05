@@ -20,13 +20,12 @@ module FAM(
     input num_in,//用于确认该指令在并行的两条指令中的顺序
     input [`PC_BUS] pc,//pc
     //input [`PC_BUS] npc,//next pc
-    input [`DATA_BUS] imm,//立即数
-    input [`DECODEOUT_BUS] decode_out,//decode 产生的控制信号具体未定义
+    //input [`DATA_BUS] imm,//立即数
+    input [`DECODEOUT_BUS] decode_out,//decode 产生的控制信号
     output [`DATA_BUS] rfrdata1,
     output [`DATA_BUS] rfrdata2,
-
-    //TODO: 需要传出中间的寄存器写信号用于数据冒险
-
+    
+    output reg [`RFW_BUS] rfw_s1,
 
     output reg mem_w,
     output reg [3:0] DWea,//传出的写信号
@@ -36,13 +35,17 @@ module FAM(
 
     
     output num_out,
-    output rfwe,//寄存器写
-    output [`REG_ADDR_BUS] rfwaddr,
-    output reg [`DATA_BUS] rfwdata,
+    output [`RFW_BUS] rfw,
+    //output rfwe,//寄存器写
+    //output [`REG_ADDR_BUS] rfwaddr,
+    //output reg [`DATA_BUS] rfwdata,
 
     output _endsign//暂时不用
 );
 
+    wire rfwe;
+    wire [`REG_ADDR_BUS] rfwaddr;
+    reg [`DATA_BUS] rfwdata;
 
     wire [1:0] InstType;
     wire [`REG_ADDR_BUS] rs;
@@ -97,6 +100,25 @@ module FAM(
          .Zero(Zero)
      );
 
+
+    always @ (*)
+    begin
+        rfw_s1[`RFWE] <= RFWe;
+        rfw_s1[`RFWA] <= rd;
+        case (RFWsrc)
+            `RFW_FROM_ALU:
+            begin
+                rfw_s1[`RFWC] <= 1'b1;
+                rfw_s1[`RFWD] <= aluout;
+            end
+            `RFW_FROM_PC:
+            begin
+                rfw_s1[`RFWC] <= 1'b1;
+                rfw_s1[`RFWD] <= pc + 4;
+            end
+            default {rfw_s1[`RFWC],rfw_s1[`RFWD]} <= {1'b0,`DATA_INITIAL};
+        endcase
+    end
 
     wire mem_DMWe;
     wire mem_DMsign;
@@ -175,6 +197,7 @@ module FAM(
         
     end
 
+    assign rfw = {rfwe,1'b1,rfwaddr,rfwdata};
 
 endmodule
 

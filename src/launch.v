@@ -10,9 +10,6 @@
 //////////////////////////
 `include "def.vh"
 module LAUNCH_SELECT(
-    input clk,
-    input rst,
-    input stop,
 
     input [`PC_BUS] in1_pc,
     input [`PC_BUS] in1_npc,

@@ -36,7 +36,16 @@
 `define PC_BUS 31:0
 `define MEM_ADDR_BUS 31:0
 
+/*
+//instbuf 
+`define INSTBUF_BUS
+`define INSTBUF_LEN
+`define IB_PC
+`define IB_NPC
+`define IB_INST
+*/
 
+//decode
 `define DECODEOUT_BUS 66:0
 `define DECODEOUTLEN 67
 `define DC_INSTTYPE 66:65

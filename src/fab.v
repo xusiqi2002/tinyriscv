@@ -30,15 +30,20 @@ module FAB(
     output reg branch_flag,//跳转信号
     output reg [`PC_BUS] branch_address,//跳转地址
 
-    //TODO: 需要传出中间的寄存器写信号用于数据冒险
+    output [`RFW_BUS] rfw_s1,
 
     output num_out,
-    output rfwe,//
+    output [`RFW_BUS] rfw,
+    /*output rfwe,//
     output [`REG_ADDR_BUS] rfwaddr,
     output [`DATA_BUS] rfwdata,
-
+    */
     output _endsign//暂时不用
 );
+
+    wire rfwe;
+    wire [`REG_ADDR_BUS] rfwaddr;
+    wire [`DATA_BUS] rfwdata;
 
     wire [2:0] InstType;
     wire [`REG_ADDR_BUS] rs;
@@ -122,6 +127,8 @@ module FAB(
     end
 
     assign branch_num = num_in;
+
+    assign rfw_s1 = {RFWe,1'b1,rd,rfwdata1};
 //流水线寄存器
 
     FAB_PLREG REG1(
@@ -137,6 +144,8 @@ module FAB(
         .rfwdata1(rfwdata1),
         .rfwdata(rfwdata)
     );
+
+    assign rfw = {rfwe,1'b1,rfwaddr,rfwdata};
 
 endmodule
 
