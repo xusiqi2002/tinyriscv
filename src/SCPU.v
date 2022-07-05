@@ -310,7 +310,7 @@ module SCPU(
     wire [`DATA_BUS] wbin1_rfwd;
 
 //流水线寄存器 执行到写回的流水线寄存器
-    PLREG_WB PRWB1(
+    PLREG_EX_WB PRWB1(
         .clk(clk),
         .rst(`DISABLE),
         .stop(`DISABLE),
@@ -330,7 +330,7 @@ module SCPU(
     wire [`REG_ADDR_BUS] wbin2_rfwa;
     wire [`DATA_BUS] wbin2_rfwd;
 
-    PLREG_WB PRWB2(
+    PLREG_EX_WB PRWB2(
         .clk(clk),
         .rst(`DISABLE),
         .stop(`DISABLE),

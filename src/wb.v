@@ -11,7 +11,7 @@
 //判断、选择执行模块产生的信号
 //////////////////////////
 `include "def.vh"
-module RF(
+module WB(
     input num_in1,
     input rfwe_in1,
     input [`REG_ADDR_BUS] rfwaddr_in1,
@@ -22,7 +22,6 @@ module RF(
     output reg rfwe_out2
 );
 
-//TODO:是否增加对num的检查
 //使用1位num判断前提时两条指令一直是并行的
 
     always @ (*)
