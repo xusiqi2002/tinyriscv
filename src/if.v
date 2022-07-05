@@ -30,7 +30,9 @@ module IF(
 
     input branch_flag,//为1表示采用branch_addr作为下一个PC地址，预测错误
     input [`PC_BUS] branch_addr,//从ex阶段ALU返回
-    output [1:0] issue
+    output [1:0] issue,
+    output isbranch1,
+    output isbranch2
 );
 
     reg [`PC_BUS] PC; //始终为两条指令中执行的第一条指令
@@ -48,6 +50,10 @@ module IF(
         .branch_flag(branch_flag),.br_flag_pre(br_flag_pre)
     );
 
+    assign isbranhc1=br_flag1|jump_flag1;
+    assign isbranch2=br_flag2|jump_flag2;
+    assign br_taken1=(br_flag_pre&br_flag1)|jump_flag1;
+    assign br_taken2=(br_flag_pre & br_flag2)|jump_flag2;
     
     always@*
     begin
