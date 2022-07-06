@@ -43,10 +43,10 @@ module INST_BUF(
 
     output sendout_flag2,
 
-    output instbuf_full//TODO:具体有待定义，送出表示当前状态的指令送给if,用于确定是否取指
+    output instbuf_full
 
 );
-//对于顺序发射,能否跳转时直接清空？
+
     integer i;
 
     reg buf_full;
@@ -81,24 +81,42 @@ module INST_BUF(
             if(!instbuf_full)
                 case(issue)
                     2'b01: begin
-                        for(i=0;i<4;i=i+1)
-                            if(inst[i]==null_inst)
-                                inst[i]={in2_pc,in2_npc,in2_inst};
+                        if(inst[0]==null_inst)
+                            inst[0]={in2_pc,in2_npc,in2_inst};
+                        else if(inst[1]==null_inst)
+                            inst[1]={in2_pc,in2_npc,in2_inst};
+                        else if(inst[2]==null_inst)
+                            inst[2]={in2_pc,in2_npc,in2_inst};
+                        else 
+                            inst[3]={in2_pc,in2_npc,in2_inst};
                     end
                     2'b10: begin
-                        for(i=0;i<4;i=i+1)
-                            if(inst[i]==null_inst)
-                                inst[i]={in1_pc,in1_npc,in1_inst};
+                        if(inst[0]==null_inst)
+                            inst[0]={in1_pc,in1_npc,in1_inst};
+                        else if(inst[1]==null_inst)
+                            inst[1]={in1_pc,in1_npc,in1_inst};
+                        else if(inst[2]==null_inst)
+                            inst[2]={in1_pc,in1_npc,in1_inst};
+                        else 
+                            inst[3]={in1_pc,in1_npc,in1_inst};
                     end
                     2'b11: begin
                         if(inst[2]!=null_inst && inst[3]==null_inst)
                             buf_full=1'b1;//指令buf剩一个空位，需存入两条指令，传出buf_full
-                        else 
-                            for(i=0;i<4;i=i+1)
-                                if(inst[i]==null_inst) begin//buf剩两个及以上空位
-                                    inst[i]={in1_pc,in1_npc,in1_inst};
-                                    inst[i+1]={in2_pc,in2_npc,in2_inst};
-                                end
+                        else begin
+                            if(inst[0]==null_inst) begin
+                                inst[0]={in1_pc,in1_npc,in1_inst};
+                                inst[1]={in2_pc,in2_npc,in2_inst};
+                            end
+                            else if(inst[1]==null_inst) begin
+                                inst[1]={in1_pc,in1_npc,in1_inst};
+                                inst[2]={in2_pc,in2_npc,in2_inst};
+                            end
+                            else if(inst[2]==null_inst) begin
+                                inst[2]={in1_pc,in1_npc,in1_inst};
+                                inst[3]={in2_pc,in2_npc,in2_inst};
+                            end
+                        end
                     end
                 endcase
         end
