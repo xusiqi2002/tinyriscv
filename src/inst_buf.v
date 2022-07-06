@@ -4,8 +4,8 @@
 //文件名：inst_buf.v
 //模块名:INST_BUF
 //
-//创建日期：2022-7-2
-//最后修改日期: 2022-7-5
+//创建日期：2022-7-22
+//最后修改日期: 2022-7-22
 //
 //
 //指令缓存
@@ -34,7 +34,7 @@ module INST_BUF(
     output [`PC_BUS] out1_pc,
     output [`PC_BUS] out1_npc,
     output sendout_flag1,
-    //input branch_flag,
+    input branch_flag,
 
     output [`INST_BUS] out2_inst,
     output [`PC_BUS] out2_pc,
@@ -42,7 +42,7 @@ module INST_BUF(
 
     output sendout_flag2,
 
-    output instbuf_full//送出表示当前状态的指令送给if,用于确定是否取指
+    output instbuf_full//TODO:具体有待定义，送出表示当前状态的指令送给if,用于确定是否取指
 
 );
 //对于顺序发射,能否跳转时直接清空？
@@ -95,22 +95,18 @@ module INST_BUF(
                         else 
                             for(i=0;i<4;i=i+1)
                                 if(inst[i]==null_inst) begin//buf剩两个及以上空位
-                                    //inst[i]={isbranch1,br_taken1,in1_pc,in1_npc,in1_inst};
-                                    inst[i]={in1_pc,in1_npc,in1_inst};
-                                    //inst[i+1]={isbranch2,br_taken2,in2_pc,in2_npc,in2_inst};
-                                    inst[i+1]={in2_pc,in2_npc,in2_inst};
+                                    inst[i]={isbranch1,br_taken1,in1_pc,in1_npc,in1_inst};
+                                    inst[i+1]={isbranch2,br_taken2,in2_pc,in2_npc,in2_inst};
                                 end
                     end
                 endcase
             //判断该周期送出哪些指令
-            if((inst[0][6:0]==7'b1100011) && (inst[1][6:0]==7'b1100011))
-            begin//两条branch指令
+            if((inst[0][6:0]==7'b1100011) && (inst[1][6:0]==7'b1100011) begin//两条branch指令
                 send_flag1=1'b1;
                 send_flag2=1'b0;
             end
             else if((inst[0][6:0]==7'b0000011 | inst[0][6:0]==7'b0100011) && 
-                (inst[1][6:0]==7'b0000011 | inst[1][6:0]==7'b0100011)) 
-            begin//两条访存指令
+                (inst[1][6:0]==7'b0000011 | inst[1][6:0]==7'b0100011)) begin//两条访存指令
                 send_flag1=1'b1;
                 send_flag2=1'b0;
             end
