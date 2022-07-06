@@ -29,7 +29,7 @@ module DECODE(
 
     assign Op=inst[6:0];
     assign Funct7=inst[31:25];
-    assign FUnct3=inst[14:12];
+    assign Funct3=inst[14:12];
     assign iimm_shamt=inst[24:20];
     assign iimm=inst[31:20];
     assign simm={inst[31:25],inst[11:7]};

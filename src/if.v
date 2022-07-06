@@ -101,17 +101,28 @@ module IF(
     begin
         if(PC[2]==1'b1)
             if((br_flag_pre & br_flag2)|jump_flag2)//只执行第二条指令且发生跳转
+            begin
+                npc1<= `NPC_INITIAL;
                 npc2<=NPC;
+            end
             else 
+            begin
+                npc1<= `NPC_INITIAL;
                 npc2<=PC+4;
+            end
         else
             if((br_flag_pre & br_flag1)|jump_flag1)//第一条指令发生跳转
+            begin
                 npc1<=NPC;
-            else if((br_flag_pre & br_flag2)|jump_flag2) begin
+                npc2<= `NPC_INITIAL;
+            end
+            else if((br_flag_pre & br_flag2)|jump_flag2)
+            begin
                 npc1<=PC+4;
                 npc2<=NPC;
             end
-            else begin
+            else
+            begin
                 npc1<=PC+4;
                 npc2<=PC+8; 
             end     

@@ -62,7 +62,8 @@ module SCPU(
 
         .isbranch_pre(isbranch_pre),
 
-        .branch_flag(branch_flag),
+        //.branch_flag(branch_flag),
+        .branch_flag(`DISABLE),//测试用
         .branch_addr(branch_address),
         .issue(if_v)
     );
@@ -106,7 +107,7 @@ module SCPU(
         .out2_inst(id2_inst),
         .out2_pc(id2_pc),
         .out2_npc(id2_npc),
-        .sendout_flag2(id1_v),
+        .sendout_flag2(id2_v),
         .launch_flag2(launch_flag[2] | launch_flag[0]),
 
         .instbuf_full(instbuf_full)
@@ -215,7 +216,7 @@ module SCPU(
 //decode和excute之间的流水线寄存器
     RLREG_DE_EX PRDEEX1(
         .clk(clk),
-        .rst(branch_flag),
+        .rst(branch_flag | reset),
         .stop(`DISABLE),
         .num_in(lout1_num),
         .num_out(ex1in_num),
@@ -234,7 +235,7 @@ module SCPU(
     
     RLREG_DE_EX PRDEEX2(
         .clk(clk),
-        .rst(branch_flag),
+        .rst(branch_flag | reset),
         .stop(`DISABLE),
         .num_in(lout2_num),
         .num_out(ex2in_num),
@@ -256,7 +257,7 @@ module SCPU(
 //支持运算和跳转
     FAB EXC1(
         .clk(clk),
-        .rst_s1(`DISABLE),
+        .rst_s1(reset),
         .stop(`DISABLE),//可扩展
         .num_in(ex1in_num),//一个顺序编号，用于确定在同时进行的两条指令的顺序
         .pc(ex1in_pc),//pc
