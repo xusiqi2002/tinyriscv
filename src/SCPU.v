@@ -12,6 +12,8 @@
 module SCPU(
     input clk,            // clock
     input reset,          // reset
+
+//用于取指
     output [31:0] inst_addr_out,
     input [63:0] inst_in,     //一次存取两条指令
 
@@ -42,11 +44,12 @@ module SCPU(
 
     wire instbuf_full;
 
+//取指模块
     IF U_IF(
         .clk(clk),
         .rst(reset),
         .stop(instbuf_full),
-        .inst_addr_out(inst_addr_out),//取指的地址，与实际地址不同 
+        .inst_addr_out(inst_addr_out),
         .inst_in(inst_in),
 
         .out1_pc(if_pc1),
@@ -346,6 +349,7 @@ module SCPU(
 
     wire rfwe1;
     wire rfwe2;
+
 //写回阶段
     WB U_WB(
         .num_in1(wbin1_num),
@@ -360,7 +364,7 @@ module SCPU(
 
 
 
-//32个通用寄存器
+//寄存器堆
     RF U_RF(
         .clk(clk),
         .rst(reset),

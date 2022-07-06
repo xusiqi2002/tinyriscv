@@ -89,22 +89,22 @@ module LAUNCH_SELECT(
             if(rfw1[`RFWE] && (inst1_rs == rfw1[`RFWA]))
             begin
                 inst1_rs_c <= rfw1[`RFWC];
-                inst1_rfrdata1 = rfw1[`RFWD];
+                inst1_rfrdata1 <= rfw1[`RFWD];
             end
             else if(rfw2[`RFWE] && (inst1_rs == rfw2[`RFWA]))
             begin
                 inst1_rs_c <= rfw2[`RFWC];
-                inst1_rfrdata1 = rfw2[`RFWD];
+                inst1_rfrdata1 <= rfw2[`RFWD];
             end
             else if(rfw3[`RFWE] && (inst1_rs == rfw3[`RFWA]))
             begin
                 inst1_rs_c <= rfw3[`RFWC];
-                inst1_rfrdata1 = rfw3[`RFWD];
+                inst1_rfrdata1 <= rfw3[`RFWD];
             end
             else if(rfw4[`RFWE] && (inst1_rs == rfw4[`RFWA]))
             begin
                 inst1_rs_c <= rfw4[`RFWC];
-                inst1_rfrdata1 = rfw4[`RFWD];
+                inst1_rfrdata1 <= rfw4[`RFWD];
             end
             else 
             begin
@@ -114,7 +114,7 @@ module LAUNCH_SELECT(
         end
         else
         begin
-            inst1_rs_c = 1'b1;
+            inst1_rs_c <= 1'b1;
             inst1_rfrdata1 <= `DATA_INITIAL;
         end
 
@@ -124,22 +124,22 @@ module LAUNCH_SELECT(
             if(rfw1[`RFWE] && (inst1_rt == rfw1[`RFWA]))
             begin
                 inst1_rt_c <= rfw1[`RFWC];
-                inst1_rfrdata2 = rfw1[`RFWD];
+                inst1_rfrdata2 <= rfw1[`RFWD];
             end
             else if(rfw2[`RFWE] && (inst1_rt == rfw2[`RFWA]))
             begin
                 inst1_rt_c <= rfw2[`RFWC];
-                inst1_rfrdata2 = rfw2[`RFWD];
+                inst1_rfrdata2 <= rfw2[`RFWD];
             end
             else if(rfw3[`RFWE] && (inst1_rt == rfw3[`RFWA]))
             begin
                 inst1_rt_c <= rfw3[`RFWC];
-                inst1_rfrdata2 = rfw3[`RFWD];
+                inst1_rfrdata2 <= rfw3[`RFWD];
             end
             else if(rfw4[`RFWE] && (inst1_rt == rfw4[`RFWA]))
             begin
                 inst1_rt_c <= rfw4[`RFWC];
-                inst1_rfrdata2 = rfw4[`RFWD];
+                inst1_rfrdata2 <= rfw4[`RFWD];
             end
             else 
             begin
@@ -149,7 +149,7 @@ module LAUNCH_SELECT(
         end
         else
         begin
-            inst1_rt_c = 1'b1;
+            inst1_rt_c <= 1'b1;
             inst1_rfrdata2 <= `DATA_INITIAL;
         end
         
@@ -159,22 +159,22 @@ module LAUNCH_SELECT(
             if(rfw1[`RFWE] && (inst2_rs == rfw1[`RFWA]))
             begin
                 inst2_rs_c <= rfw1[`RFWC];
-                inst2_rfrdata1 = rfw1[`RFWD];
+                inst2_rfrdata1 <= rfw1[`RFWD];
             end
             else if(rfw2[`RFWE] && (inst2_rs == rfw2[`RFWA]))
             begin
                 inst2_rs_c <= rfw2[`RFWC];
-                inst2_rfrdata1 = rfw2[`RFWD];
+                inst2_rfrdata1 <= rfw2[`RFWD];
             end
             else if(rfw3[`RFWE] && (inst2_rs == rfw3[`RFWA]))
             begin
                 inst2_rs_c <= rfw3[`RFWC];
-                inst2_rfrdata1 = rfw3[`RFWD];
+                inst2_rfrdata1 <= rfw3[`RFWD];
             end
             else if(rfw4[`RFWE] && (inst2_rs == rfw4[`RFWA]))
             begin
                 inst2_rs_c <= rfw4[`RFWC];
-                inst2_rfrdata1 = rfw4[`RFWD];
+                inst2_rfrdata1 <= rfw4[`RFWD];
             end
             else 
             begin
@@ -184,7 +184,7 @@ module LAUNCH_SELECT(
         end
         else
         begin
-            inst2_rs_c = 1'b1;
+            inst2_rs_c <= 1'b1;
             inst2_rfrdata1 <= `DATA_INITIAL;
         end
 
@@ -194,22 +194,22 @@ module LAUNCH_SELECT(
             if(rfw1[`RFWE] && (inst2_rt == rfw1[`RFWA]))
             begin
                 inst2_rt_c <= rfw1[`RFWC];
-                inst2_rfrdata2 = rfw1[`RFWD];
+                inst2_rfrdata2 <= rfw1[`RFWD];
             end
             else if(rfw2[`RFWE] && (inst2_rt == rfw2[`RFWA]))
             begin
                 inst2_rt_c <= rfw2[`RFWC];
-                inst2_rfrdata2 = rfw2[`RFWD];
+                inst2_rfrdata2 <= rfw2[`RFWD];
             end
             else if(rfw3[`RFWE] && (inst2_rt == rfw3[`RFWA]))
             begin
                 inst2_rt_c <= rfw3[`RFWC];
-                inst2_rfrdata2 = rfw3[`RFWD];
+                inst2_rfrdata2 <= rfw3[`RFWD];
             end
             else if(rfw4[`RFWE] && (inst2_rt == rfw4[`RFWA]))
             begin
                 inst2_rt_c <= rfw4[`RFWC];
-                inst2_rfrdata2 = rfw4[`RFWD];
+                inst2_rfrdata2 <= rfw4[`RFWD];
             end
             else 
             begin
@@ -219,7 +219,7 @@ module LAUNCH_SELECT(
         end
         else
         begin
-            inst2_rt_c = 1'b1;
+            inst2_rt_c <= 1'b1;
             inst2_rfrdata2 <= `DATA_INITIAL;
         end
     end

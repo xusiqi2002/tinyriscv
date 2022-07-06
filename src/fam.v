@@ -35,12 +35,12 @@ module FAM(
 
     
     output num_out,
-    output [`RFW_BUS] rfw,
+    output [`RFW_BUS] rfw
     //output rfwe,//寄存器写
     //output [`REG_ADDR_BUS] rfwaddr,
     //output reg [`DATA_BUS] rfwdata,
 
-    output _endsign//暂时不用
+    //output _endsign//暂时不用
 );
 
     wire rfwe;
@@ -85,6 +85,7 @@ module FAM(
 
      wire Zero;
      reg [`DATA_BUS] B;
+     wire [`DATA_BUS] aluout;
      always @ (*)
      case (ALUsrc)
          `ALU_FROM_IMM: B <= immout;
@@ -135,6 +136,8 @@ module FAM(
         .clk(clk),
         .rst(rst_s1),
         .stop(stop),
+        .num_in(num_in),
+        .num_out(num_out),
         .DMWe(DMWe),
         .mem_DMWe(mem_DMWe),
         .DMsign(DMsign),

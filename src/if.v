@@ -35,6 +35,8 @@ module IF(
 
     reg [`PC_BUS] PC; //始终为两条指令中执行的第一条指令
     reg [`PC_BUS] NPC;//下一次取值的指令PC
+    wire [`PC_BUS] br_address1;
+    wire [`PC_BUS] br_address2;
 
     MINI_DECODE MDECODE1(.inst(out1_inst),.PC(PC),
         .br_flag(br_flag1),.jump_flag(jump_flag1),.br_address(br_address1)
@@ -122,15 +124,18 @@ module MINI_DECODE(
     begin
         if(inst[6:0]==7'b1100011) begin//btype
             br_flag<=1'b1;
+            jump_flag<=1'b0;
             br_address<=PC+{{{32-13}{inst[31]}},{inst[31],inst[7],inst[30:25],inst[11:8]}, 1'b0};
         end
         else if(inst[6:0]==7'b1101111) begin//jal
+            br_flag<=1'b0;
             jump_flag<=1'b1;
             br_address<=PC+{{{32-21}{inst[31]}},{inst[31],inst[19:12],inst[20],inst[30:21]}, 1'b0};
         end
         else begin//not jump
             br_flag<=1'b0;
             jump_flag<=1'b0;
+            br_address <= `PC_INITIAL;
         end
     end
 

@@ -25,15 +25,17 @@ module WB(
 //使用1位num判断前提时两条指令一直是并行的
 
     always @ (*)
-    if(rfwe_in1 & rfwe_in2 & (rfwaddr_in1 == rfwaddr_in2))
     begin
-        rfwe_out1 <= num_in1;
-        rfwe_out2 <= num_in2;
-    end
-    else
-    begin
-        rfwe_out1 <= rfwe_in1;
-        rfwe_out2 <= rfwe_out2;
+        if(rfwe_in1 & rfwe_in2 & (rfwaddr_in1 == rfwaddr_in2))
+        begin
+            rfwe_out1 <= num_in1;
+            rfwe_out2 <= num_in2;
+        end
+        else
+        begin
+            rfwe_out1 <= rfwe_in1;
+            rfwe_out2 <= rfwe_in2;
+        end
     end
 
 endmodule

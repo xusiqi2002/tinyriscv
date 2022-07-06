@@ -33,12 +33,12 @@ module FAB(
     output [`RFW_BUS] rfw_s1,
 
     output num_out,
-    output [`RFW_BUS] rfw,
+    output [`RFW_BUS] rfw
     /*output rfwe,//
     output [`REG_ADDR_BUS] rfwaddr,
     output [`DATA_BUS] rfwdata,
     */
-    output _endsign//暂时不用
+    //output _endsign//暂时不用
 );
 
     wire rfwe;
