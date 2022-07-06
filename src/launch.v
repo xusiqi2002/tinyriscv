@@ -226,7 +226,7 @@ module LAUNCH_SELECT(
     
 
     assign inst1_c = inst1_rs_c && inst1_rt_c && receive_flag1;
-    assign inst2_c = inst2_rs_c && inst2_rt_c && receive_flag2;
+    assign inst2_c = inst1_c && inst2_rs_c && inst2_rt_c && receive_flag2;
     
 
 ////////////////////////////////////
