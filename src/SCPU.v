@@ -4,7 +4,7 @@
 //模块名：SCPU
 //
 //创建日期：2022-7-2
-//最后修改日期: 2022-7-4
+//最后修改日期: 2022-7-6
 //
 //
 //////////////////////////
@@ -14,8 +14,6 @@ module SCPU(
     input reset,          // reset
     output [31:0] inst_addr_out,
     input [63:0] inst_in,     //一次存取两条指令
-   
-
 
 //用于传给RAM
     output mem_w, // output: memory write signal
@@ -30,20 +28,85 @@ module SCPU(
     wire branch_num;
     wire isbranch_pre;
     wire branch_flag;//跳转信号
-    wire branch_address;//跳转地址
+    wire [`PC_BUS]branch_address;//跳转地址
 
-//取指：一次取多条
-//内置PC,输出PC地址
+    wire [`PC_BUS] if_pc1;
+    wire [`PC_BUS] if_npc1;
+    wire [`INST_BUS] if_inst1;
+
+    wire [`PC_BUS] if_pc2;
+    wire [`PC_BUS] if_npc2;
+    wire [`INST_BUS] if_inst2;
+
+    wire [1:0] if_v;
+
+    wire instbuf_full;
+
     IF U_IF(
+        .clk(clk),
+        .rst(reset),
+        .stop(instbuf_full),
+        .inst_addr_out(inst_addr_out),//取指的地址，与实际地址不同 
+        .inst_in(inst_in),
 
+        .out1_pc(if_pc1),
+        .out1_npc(if_npc1),
+        .out1_inst(if_inst1),
+    
+        .out2_pc(if_pc2),
+        .out2_npc(if_npc2),
+        .out2_inst(if_inst2),
+
+        .isbranch_pre(isbranch_pre),
+
+        .branch_flag(branch_flag),
+        .branch_addr(branch_address),
+        .issue(if_v)
     );
 
     wire [3:0] launch_flag;
 
+    wire id1_v;
+    wire [`INST_BUS]id1_inst;
+    wire [`PC_BUS] id1_pc;
+    wire [`PC_BUS] id1_npc;
+
+    wire id2_v;
+    wire [`INST_BUS]id2_inst;
+    wire [`PC_BUS] id2_pc;
+    wire [`PC_BUS] id2_npc;
+
 //指令缓存
 //代替IF,ID间的流水线寄存器
     INST_BUF U_INSTBUF(
+        .clk(clk),
+        .rst(reset),//清空
+        .stop(`DISABLE),
 
+        .branch_flag(branch_flag),
+        .issue(if_v),
+
+        .in1_inst(if_inst1),
+        .in1_pc(if_pc1),
+        .in1_npc(if_npc1),
+
+        .in2_inst(if_inst2),
+        .in2_pc(if_pc2),
+        .in2_npc(if_npc2),
+    
+        .out1_inst(id1_inst),
+        .out1_pc(id1_pc),
+        .out1_npc(id1_npc),
+        .sendout_flag1(id1_v),
+        .launch_flag1(launch_flag[3] | launch_flag[1]),
+
+        .out2_inst(id2_inst),
+        .out2_pc(id2_pc),
+        .out2_npc(id2_npc),
+        .sendout_flag2(id1_v),
+        .launch_flag2(launch_flag[2] | launch_flag[0]),
+
+        .instbuf_full(instbuf_full)
     );
 
 
@@ -52,13 +115,13 @@ module SCPU(
     wire [`DECODEOUT_BUS] decode_out2;
 //解码模块1
     DECODE DECODE_1(
-        .inst(),
+        .inst(id1_inst),
         .decode_out(decode_out1)
     );
 
 //解码模块2
     DECODE DECODE_2(
-        .inst(),
+        .inst(id2_inst),
         .decode_out(decode_out2)
     );
 
@@ -108,15 +171,15 @@ module SCPU(
 
 //对解码的输出进行选择，送入执行阶段
     LAUNCH_SELECT U_L(
-        .in1_pc(),
-        .in1_npc(),
+        .in1_pc(id1_pc),
+        .in1_npc(id1_npc),
         .in1_decodeout(decode_out1),
-        .receive_flag1(),
+        .receive_flag1(id1_v),
     
-        .in2_pc(),
-        .in2_npc(),
+        .in2_pc(id2_pc),
+        .in2_npc(id2_npc),
         .in2_decodeout(decode_out2),
-        .receive_flag2(),
+        .receive_flag2(id2_v),
 
         .rfrd1(rfrd1),
         .rfrd2(rfrd2),
@@ -149,8 +212,8 @@ module SCPU(
 //decode和excute之间的流水线寄存器
     RLREG_DE_EX PRDEEX1(
         .clk(clk),
-        .rst(),
-        .stop(),
+        .rst(branch_flag),
+        .stop(`DISABLE),
         .num_in(lout1_num),
         .num_out(ex1in_num),
         .pc_in(lout1_pc),//pc
@@ -168,8 +231,8 @@ module SCPU(
     
     RLREG_DE_EX PRDEEX2(
         .clk(clk),
-        .rst(),
-        .stop(),
+        .rst(branch_flag),
+        .stop(`DISABLE),
         .num_in(lout2_num),
         .num_out(ex2in_num),
         .pc_in(lout2_pc),//pc
@@ -190,8 +253,8 @@ module SCPU(
 //支持运算和跳转
     FAB EXC1(
         .clk(clk),
-        .rst_s1(),
-        .stop(),//可扩展
+        .rst_s1(`DISABLE),
+        .stop(`DISABLE),//可扩展
         .num_in(ex1in_num),//一个顺序编号，用于确定在同时进行的两条指令的顺序
         .pc(ex1in_pc),//pc
         .npc(ex1in_npc),//next pc
@@ -218,8 +281,8 @@ module SCPU(
 
     FAM EXC2(
         .clk(clk),
-        .rst_s1(),
-        .stop(),
+        .rst_s1(branch_flag & (~branch_num)),
+        .stop(`DISABLE),
 
         .num_in(ex2in_num),//用于确认该指令在并行的两条指令中的顺序
         .pc(ex2in_pc),//pc
@@ -249,15 +312,15 @@ module SCPU(
 //流水线寄存器 执行到写回的流水线寄存器
     PLREG_WB PRWB1(
         .clk(clk),
-        .rst(),
-        .stop(),
-        .num_in(),
+        .rst(`DISABLE),
+        .stop(`DISABLE),
+        .num_in(ex1out_num),
         .num_out(wbin1_num),
-        .rfwe_in(),
+        .rfwe_in(ex1_rfw[`RFWE]),
         .rfwe_out(wbin1_rfwe),
-        .rfwaddr_in(),
+        .rfwaddr_in(ex1_rfw[`RFWA]),
         .rfwaddr_out(wbin1_rfwa),
-        .rfwdata_in(),
+        .rfwdata_in(ex1_rfw[`RFWD]),
         .rfwdata_out(wbin1_rfwd)
     );
 
@@ -269,15 +332,15 @@ module SCPU(
 
     PLREG_WB PRWB2(
         .clk(clk),
-        .rst(),
-        .stop(),
-        .num_in(),
+        .rst(`DISABLE),
+        .stop(`DISABLE),
+        .num_in(ex2out_num),
         .num_out(wbin2_num),
-        .rfwe_in(),
+        .rfwe_in(ex2_rfw[`RFWE]),
         .rfwe_out(wbin2_rfwe),
-        .rfwaddr_in(),
+        .rfwaddr_in(ex2_rfw[`RFWA]),
         .rfwaddr_out(wbin2_rfwa),
-        .rfwdata_in(),
+        .rfwdata_in(ex2_rfw[`RFWD]),
         .rfwdata_out(wbin2_rfwd)
     );
 
