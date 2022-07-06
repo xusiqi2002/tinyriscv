@@ -65,7 +65,7 @@ module FAM(
     wire [1:0] RFWsrc;//0:aluwire 1:datamemory
 
     assign {
-        InstType[2:0],
+        InstType[1:0],
         rs[`REG_ADDR_BUS],
         rt[`REG_ADDR_BUS],
         rd[`REG_ADDR_BUS],
