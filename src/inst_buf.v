@@ -54,16 +54,23 @@ module INST_BUF(
     wire [95:0] null_inst;
     assign null_inst=96'b0;
 
-    always@(posedge clk,posedge rst)
+
+    initial buf_full = 1'b0;
+
+    always@(posedge clk)
+    //always@(posedge clk,posedge rst)
     begin
-        if(rst) begin
+        if(rst | branch_flag)
+        begin
             for(i=0;i<4;i=i+1)
                 inst[i]=null_inst;
         end
-
-            if(branch_flag==1'b1)//之前产生预测错误，清空全部指令
+        else 
+        begin
+            /*if(branch_flag==1'b1)//之前产生预测错误，清空全部指令
                 for(i=0;i<4;i=i+1)
                     inst[i]=null_inst;
+            */
             //上一周期指令，sendout_flag寄存器类型，还未更改
             //更新指令缓存，将送出的指令清除
             if(launch_flag1 && !launch_flag2) begin//第一条指令送出,第二条指令保留
@@ -120,6 +127,7 @@ module INST_BUF(
                     end
                 endcase
         end
+    end
 
     assign instbuf_full=(inst[3]!=null_inst | buf_full) ? 1'b1 : 1'b0 ;
     assign sendout_flag1=(inst[0]==null_inst)?1'b0:1'b1;
