@@ -244,7 +244,30 @@ module LAUNCH_SELECT(
     case ({inst1_c,inst2_c})
         2'b11:
         begin
-
+            if(inst1_type == `INSTTYPE_AL)
+            begin
+                if(inst2_type == `INSTTYPE_BR)
+                    launch_flag <= 4'b0110;
+                else
+                    launch_flag <= 4'b1001;
+            end
+            else 
+            begin
+                if(inst2_type == inst1_type)
+                begin
+                    if(inst1_type == `INSTTYPE_AG)
+                        launch_flag <= 4'b0100;
+                    else
+                        launch_flag <= 4'b1000;
+                end
+                else
+                begin
+                    if(inst1_type == `INSTTYPE_AG)
+                        launch_flag <= 4'b0110;
+                    else
+                        launch_flag <= 4'b1001;
+                end
+            end
         end
         2'b10:
         begin
@@ -253,7 +276,8 @@ module LAUNCH_SELECT(
             else
                 launch_flag <= 4'b1000;
         end
-        2'b01:
+        default: launch_flag <= 4'b0000;
+        /*2'b01:
         begin
             if(inst2_type == `INSTTYPE_AG)
                 launch_flag <= 4'b0001;
@@ -263,7 +287,7 @@ module LAUNCH_SELECT(
         2'b00: 
         begin
             launch_flag <= 4'b0000;
-        end
+        end*/
 
     endcase
 
@@ -271,10 +295,10 @@ module LAUNCH_SELECT(
 
     assign {out1_num,out1_pc,out1_npc,out1_decodeout,out1_rfrdata1,out1_rfrdata2}
         = ({196{launch_flag[3]}} & {1'b0,in1_pc,in1_npc,in1_decodeout,inst1_rfrdata1,inst1_rfrdata2})
-        & ({196{launch_flag[1]}} & {1'b1,in2_pc,in2_npc,in2_decodeout,inst2_rfrdata1,inst2_rfrdata2});
+        | ({196{launch_flag[1]}} & {1'b1,in2_pc,in2_npc,in2_decodeout,inst2_rfrdata1,inst2_rfrdata2});
 
     assign {out2_num,out2_pc,out2_npc,out2_decodeout,out2_rfrdata1,out2_rfrdata2}
         = ({196{launch_flag[2]}} & {1'b0,in1_pc,in1_npc,in1_decodeout,inst1_rfrdata1,inst1_rfrdata2})
-        & ({196{launch_flag[0]}} & {1'b1,in2_pc,in2_npc,in2_decodeout,inst2_rfrdata1,inst2_rfrdata2});
+        | ({196{launch_flag[0]}} & {1'b1,in2_pc,in2_npc,in2_decodeout,inst2_rfrdata1,inst2_rfrdata2});
 
 endmodule
