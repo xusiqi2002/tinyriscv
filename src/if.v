@@ -34,7 +34,7 @@ module IF(
 );
 
     reg [`PC_BUS] PC; //始终为两条指令中执行的第一条指令
-    reg [`PC_BUS] NPC;//下一次取值的指令PC
+    reg [`PC_BUS] NPC,npc1,npc2;//下一次取值的指令PC
     wire [`PC_BUS] br_address1;
     wire [`PC_BUS] br_address2;
 
@@ -96,13 +96,33 @@ module IF(
         end
     end
 
+    //下一条取指指令的PC
+    always@(*)
+    begin
+        if(PC[2]==1'b1)
+            if((br_flag_pre & br_flag2)|jump_flag2)//只执行第二条指令且发生跳转
+                npc2<=NPC;
+            else 
+                npc2<=PC+4;
+        else
+            if((br_flag_pre & br_flag1)|jump_flag1)//第一条指令发生跳转
+                npc1<=NPC;
+            else if((br_flag_pre & br_flag2)|jump_flag2) begin
+                npc1<=PC+4;
+                npc2<=NPC;
+            end
+            else begin
+                npc1<=PC+4;
+                npc2<=PC+8; 
+            end     
+    end
     assign inst_addr_out=PC;//在总线中取{PC[31:3],3'b000}
     assign out1_pc=PC[2]?PC-4:PC;//PC[2]=1时，第一条指令不执行，PC为第二条指令的PC
     assign out2_pc=PC[2]?PC:PC+4;  
     assign out1_inst=inst_in[63:32];
     assign out2_inst=inst_in[31:0];
-    assign out1_npc=NPC[2]?NPC-4:NPC;//下一条取指指令的PC
-    assign out2_npc=NPC[2]?NPC:NPC+4;
+    assign out1_npc=npc1;
+    assign out2_npc=npc2;
 endmodule
 
 
