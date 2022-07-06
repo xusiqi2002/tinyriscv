@@ -180,6 +180,9 @@ module DECODE(
     assign rt = inst[24:20];
     assign rd = inst[11:7];
 
+    assign rs_v = rtype | itype_l | itype_r | i_jalr | stype | sbtype;
+    assign rt_v = rtype | stype | sbtype;
+
     assign decode_out = {
         InstType[1:0],
         rs[`REG_ADDR_BUS],
