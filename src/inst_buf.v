@@ -60,8 +60,8 @@ module INST_BUF(
             for(i=0;i<4;i=i+1)
                 inst[i]=null_inst;
         end
-        else begin
-            if(branch_flag)//之前产生预测错误，清空全部指令
+
+            if(branch_flag==1'b1)//之前产生预测错误，清空全部指令
                 for(i=0;i<4;i=i+1)
                     inst[i]=null_inst;
             //上一周期指令，sendout_flag寄存器类型，还未更改
@@ -78,7 +78,7 @@ module INST_BUF(
                 inst[3]=null_inst;
             end
             //存入新的指令
-            if(!instbuf_full)
+            if(instbuf_full!=1'b1)
                 case(issue)
                     2'b01: begin
                         if(inst[0]==null_inst)
@@ -120,7 +120,7 @@ module INST_BUF(
                     end
                 endcase
         end
-    end
+
     assign instbuf_full=(inst[3]!=null_inst | buf_full) ? 1'b1 : 1'b0 ;
     assign sendout_flag1=(inst[0]==null_inst)?1'b0:1'b1;
     assign sendout_flag2=(inst[1]==null_inst)?1'b0:1'b1;

@@ -76,7 +76,7 @@ module IF(
         end
     end
 
-    always@(posedge clk)
+    always@(posedge clk,posedge rst)
     begin
         if(rst) 
             PC<=32'h0000_0000;
