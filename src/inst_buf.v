@@ -96,8 +96,8 @@ module INST_BUF(
                         else 
                             for(i=0;i<4;i=i+1)
                                 if(inst[i]==null_inst) begin//buf剩两个及以上空位
-                                    inst[i]={isbranch1,br_taken1,in1_pc,in1_npc,in1_inst};
-                                    inst[i+1]={isbranch2,br_taken2,in2_pc,in2_npc,in2_inst};
+                                    inst[i]={in1_pc,in1_npc,in1_inst};
+                                    inst[i+1]={in2_pc,in2_npc,in2_inst};
                                 end
                     end
                 endcase
