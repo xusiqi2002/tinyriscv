@@ -50,6 +50,9 @@ module INST_BUF(
     integer i;
 
     reg buf_full;
+    initial begin
+        buf_full=1'b0;
+    end
     reg [95:0] inst[0:3];//inst[95:64]=pc,inst[63:32]=npc,inst[31:0]=inst
     wire [95:0] null_inst;
     assign null_inst=96'b0;
@@ -60,7 +63,7 @@ module INST_BUF(
             for(i=0;i<4;i=i+1)
                 inst[i]=null_inst;
         end
-
+        else begin
             if(branch_flag==1'b1)//之前产生预测错误，清空全部指令
                 for(i=0;i<4;i=i+1)
                     inst[i]=null_inst;
@@ -120,7 +123,7 @@ module INST_BUF(
                     end
                 endcase
         end
-
+    end
     assign instbuf_full=(inst[3]!=null_inst | buf_full) ? 1'b1 : 1'b0 ;
     assign sendout_flag1=(inst[0]==null_inst)?1'b0:1'b1;
     assign sendout_flag2=(inst[1]==null_inst)?1'b0:1'b1;
