@@ -45,7 +45,7 @@ module FAB(
     wire [`REG_ADDR_BUS] rfwaddr;
     wire [`DATA_BUS] rfwdata;
 
-    wire [2:0] InstType;
+    wire [1:0] InstType;
     wire [`REG_ADDR_BUS] rs;
     wire [`REG_ADDR_BUS] rt;
     wire [`REG_ADDR_BUS] rd;
