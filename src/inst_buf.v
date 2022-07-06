@@ -4,8 +4,8 @@
 //文件名：inst_buf.v
 //模块名:INST_BUF
 //
-//创建日期：2022-7-22
-//最后修改日期: 2022-7-22
+//创建日期：2022-7-6
+//最后修改日期: 2022-7-6
 //
 //
 //指令缓存
@@ -25,16 +25,17 @@ module INST_BUF(
     input [`INST_BUS] in1_inst,
     input [`PC_BUS] in1_pc,
     input [`PC_BUS] in1_npc,
+    input launch_flag1,
 
     input [`INST_BUS] in2_inst,
     input [`PC_BUS] in2_pc,
     input [`PC_BUS] in2_npc,
+    input launch_flag2,
     
     output [`INST_BUS] out1_inst,
     output [`PC_BUS] out1_pc,
     output [`PC_BUS] out1_npc,
     output sendout_flag1,
-    input branch_flag,
 
     output [`INST_BUS] out2_inst,
     output [`PC_BUS] out2_pc,
@@ -48,7 +49,7 @@ module INST_BUF(
 //对于顺序发射,能否跳转时直接清空？
     integer i;
 
-    reg send_flag1,send_flag2,buf_full;
+    reg buf_full;
     reg [95:0] inst[0:3];//inst[95:64]=pc,inst[63:32]=npc,inst[31:0]=inst
     wire [95:0] null_inst;
     assign null_inst=96'b0;
@@ -65,12 +66,12 @@ module INST_BUF(
                     inst[i]=null_inst;
             //上一周期指令，sendout_flag寄存器类型，还未更改
             //更新指令缓存，将送出的指令清除
-            if(send_flag1 && !send_flag2) begin//第一条指令送出,第二条指令保留
+            if(launch_flag1 && !launch_flag2) begin//第一条指令送出,第二条指令保留
                 for(i=0;i<3;i=i+1)
                     inst[i]=inst[i+1];
                 inst[3]=null_inst;
             end
-            else if(send_flag2) begin//第二条指令送出,第一条指令肯定也送出
+            else if(launch_flag2) begin//第二条指令送出,第一条指令肯定也送出
                 for(i=0;i<2;i=i+1)
                     inst[i]=inst[i+2];
                 inst[2]=null_inst;
@@ -100,25 +101,11 @@ module INST_BUF(
                                 end
                     end
                 endcase
-            //判断该周期送出哪些指令
-            if((inst[0][6:0]==7'b1100011) && (inst[1][6:0]==7'b1100011) begin//两条branch指令
-                send_flag1=1'b1;
-                send_flag2=1'b0;
-            end
-            else if((inst[0][6:0]==7'b0000011 | inst[0][6:0]==7'b0100011) && 
-                (inst[1][6:0]==7'b0000011 | inst[1][6:0]==7'b0100011)) begin//两条访存指令
-                send_flag1=1'b1;
-                send_flag2=1'b0;
-            end
-            else begin   
-                send_flag1=1'b1;
-                send_flag2=1'b1;
-            end
         end
     end
     assign instbuf_full=(inst[3]!=null_inst | buf_full) ? 1'b1 : 1'b0 ;
-    assign sendout_flag1=send_flag1;
-    assign sendout_flag2=send_flag2;
+    assign sendout_flag1=(inst[0]==null_inst)?1'b0:1'b1;
+    assign sendout_flag2=(inst[1]==null_inst)?1'b0:1'b1;
     assign out1_pc  =inst[0][95:64];
     assign out1_npc =inst[0][63:32];
     assign out1_inst=inst[0][31:0];
