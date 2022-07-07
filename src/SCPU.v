@@ -291,7 +291,7 @@ module SCPU(
         .pc(ex2in_pc),//pc
         .decode_out(ex2in_decodeout),//decode 产生的控制信号
         .rfrdata1(ex2in_rfrd1),
-        .rfrdata2(ex2in_rfrd2s),
+        .rfrdata2(ex2in_rfrd2),
     
         .rfw_s1(ex2_rfw_s1),
 
