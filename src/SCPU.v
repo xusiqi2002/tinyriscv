@@ -62,8 +62,7 @@ module SCPU(
 
         .isbranch_pre(isbranch_pre),
 
-        //.branch_flag(branch_flag),
-        .branch_flag(`DISABLE),//测试用
+        .branch_flag(branch_flag),
         .branch_addr(branch_address),
         .issue(if_v)
     );
@@ -290,9 +289,9 @@ module SCPU(
 
         .num_in(ex2in_num),//用于确认该指令在并行的两条指令中的顺序
         .pc(ex2in_pc),//pc
-        .decode_out(lout2_decodeout),//decode 产生的控制信号
-        .rfrdata1(lout2_rfrd1),
-        .rfrdata2(lout2_rfrd2),
+        .decode_out(ex2in_decodeout),//decode 产生的控制信号
+        .rfrdata1(ex2in_rfrd1),
+        .rfrdata2(ex2in_rfrd2s),
     
         .rfw_s1(ex2_rfw_s1),
 

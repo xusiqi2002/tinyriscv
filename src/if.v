@@ -76,10 +76,12 @@ module IF(
         end
     end
 
-    always@(posedge clk,posedge rst)
+    //always@(posedge clk,posedge rst)
+    always @ (posedge clk)
     begin
         if(rst) 
-            PC<=32'h0000_0000;
+            //PC<=32'h0000_0000
+            PC <= `PC_INITIAL;
         else 
             PC<=NPC;
     end
@@ -182,7 +184,9 @@ module BRANCH_PREDICT(
     //branch_flag, branch_pre_re显示之前的预测结果是否正确，用于分支预测
     output br_flag_pre//产生一个信号,用于预测跳转是否发生
 );
+
     reg [1:0] br_pre;
+    initial br_pre =2'b01;
     always@(posedge clk)
     begin
         if(isbranch_pre) begin
