@@ -102,13 +102,13 @@ module SCPU(
         .out1_pc(id1_pc),
         .out1_npc(id1_npc),
         .sendout_flag1(id1_v),
-        .launch_flag1(launch_flag[3] | launch_flag[1]),
+        .launch_flag1(launch_flag[3] | launch_flag[2]),
 
         .out2_inst(id2_inst),
         .out2_pc(id2_pc),
         .out2_npc(id2_npc),
         .sendout_flag2(id2_v),
-        .launch_flag2(launch_flag[2] | launch_flag[0]),
+        .launch_flag2(launch_flag[1] | launch_flag[0]),
 
         .instbuf_full(instbuf_full)
     );

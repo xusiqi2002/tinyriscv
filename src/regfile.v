@@ -41,7 +41,7 @@ module RF(
 
     always @(negedge clk, posedge rst)
     if (rst) begin    //  reset
-        for (i=1; i<32; i=i+1)
+        for (i=0; i<32; i=i+1)
             rf[i] = 0; //  i;
     end 
     else begin
