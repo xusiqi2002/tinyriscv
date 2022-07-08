@@ -284,7 +284,7 @@ module SCPU(
 
     FAM EXC2(
         .clk(clk),
-        .rst_s1(branch_flag & (~branch_num)),
+        .rst_s1((branch_flag & (~branch_num)) | reset),
         .stop(`DISABLE),
 
         .num_in(ex2in_num),//用于确认该指令在并行的两条指令中的顺序
@@ -315,7 +315,7 @@ module SCPU(
 //流水线寄存器 执行到写回的流水线寄存器
     PLREG_EX_WB PRWB1(
         .clk(clk),
-        .rst(`DISABLE),
+        .rst(reset),
         .stop(`DISABLE),
         .num_in(ex1out_num),
         .num_out(wbin1_num),
@@ -335,7 +335,7 @@ module SCPU(
 
     PLREG_EX_WB PRWB2(
         .clk(clk),
-        .rst(`DISABLE),
+        .rst(reset),
         .stop(`DISABLE),
         .num_in(ex2out_num),
         .num_out(wbin2_num),

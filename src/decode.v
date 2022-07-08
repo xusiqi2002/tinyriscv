@@ -96,13 +96,13 @@ module DECODE(
  //jalr
 	wire i_jalr =Op[6]&Op[5]&~Op[4]&~Op[3]&Op[2]&Op[1]&Op[0];//jalr 1100111
 
-  // s format
-  //0100011 sb,sh,sw
+    // s format
+   //0100011 sb,sh,sw
     wire stype  = ~Op[6]&Op[5]&~Op[4]&~Op[3]&~Op[2]&Op[1]&Op[0];//0100011
     wire i_sw = stype& ~Funct3[2]& Funct3[1]&~Funct3[0]; // sw 010
     wire i_sb = stype& ~Funct3[2]&~Funct3[1]&~Funct3[0]; // sb 000
     wire i_sh = stype& ~Funct3[2]&~Funct3[1]&Funct3[0]; // sh 001
-  // sb format
+   // sb format
     wire sbtype  = Op[6]&Op[5]&~Op[4]&~Op[3]&~Op[2]&Op[1]&Op[0];//1100011
     wire i_beq  = sbtype& ~Funct3[2]& ~Funct3[1]&~Funct3[0]; // beq 000
     wire i_bne = sbtype & ~Funct3[2] & ~Funct3[1] & Funct3[0]; // bne 001
@@ -111,12 +111,12 @@ module DECODE(
     wire i_bltu = sbtype & Funct3[2] & Funct3[1] &~Funct3[0]; // bltu 110
     wire i_bgeu = sbtype & Funct3[2] & Funct3[1] & Funct3[0]; // bgeu 111
 
-  // u format
+    // u format
     wire i_lui  = ~Op[6] & Op[5] & Op[4] & ~Op[3] & Op[2] & Op[1] & Op[0]; //lui 0110111
     wire i_auipc = ~Op[6] & ~Op[5] & Op[4] & ~Op[3] & Op[2] & Op[1] & Op[0]; //auipc 0110111
     wire utype = i_lui | i_auipc;
 
- // j format
+    // j format
     wire i_jal  = Op[6]& Op[5]&~Op[4]& Op[3]& Op[2]& Op[1]& Op[0];  // jal 1101111
 
   
@@ -148,7 +148,7 @@ module DECODE(
     // NPC_JALR	3'b100
     assign NPCop[0] = sbtype;
     assign NPCop[1] = i_jal;
-	assign NPCop[2] = i_jalr;
+	  assign NPCop[2] = i_jalr;
   
     assign ALUsrc     = itype_l | itype_r | stype | i_jal | i_jalr | utype;   // ALU B is from instruction immediate
 

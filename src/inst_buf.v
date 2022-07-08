@@ -65,11 +65,13 @@ module INST_BUF(
     begin
         if(rst | branch_flag)
         begin
+            buf_full=1'b0;
             for(i=0;i<4;i=i+1)
                 inst[i]=null_inst;
         end
         else 
         begin
+            buf_full=1'b0;
             /*if(branch_flag==1'b1)//之前产生预测错误，清空全部指令
                 for(i=0;i<4;i=i+1)
                     inst[i]=null_inst;

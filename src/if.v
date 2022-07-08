@@ -38,11 +38,14 @@ module IF(
     wire [`PC_BUS] br_address1;
     wire [`PC_BUS] br_address2;
 
-    MINI_DECODE MDECODE1(.inst(out1_inst),.PC(PC),
+
+    initial PC = `PC_INITIAL;
+
+    MINI_DECODE MDECODE1(.inst(out1_inst),.PC(out1_pc),
         .br_flag(br_flag1),.jump_flag(jump_flag1),.br_address(br_address1)
     );
 
-    MINI_DECODE MDECODE2(.inst(out2_inst),.PC(PC),
+    MINI_DECODE MDECODE2(.inst(out2_inst),.PC(out2_pc),
         .br_flag(br_flag2),.jump_flag(jump_flag2),.br_address(br_address2)
     );
 
@@ -212,6 +215,6 @@ module BRANCH_PREDICT(
             end
         end
     end
-    assign br_flag_pre=br_pre[1];
-
+    //assign br_flag_pre=br_pre[1];
+    assign br_flag_pre = 1'b0;//TODO:此时为测试用
 endmodule
