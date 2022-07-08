@@ -22,8 +22,8 @@ module FAM(
     //input [`PC_BUS] npc,//next pc
     //input [`DATA_BUS] imm,//立即数
     input [`DECODEOUT_BUS] decode_out,//decode 产生的控制信号
-    output [`DATA_BUS] rfrdata1,
-    output [`DATA_BUS] rfrdata2,
+    input [`DATA_BUS] rfrdata1,
+    input [`DATA_BUS] rfrdata2,
     
     output reg [`RFW_BUS] rfw_s1,
 

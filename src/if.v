@@ -57,7 +57,8 @@ module IF(
     begin
         if(branch_flag) 
             NPC<=branch_addr;
-        else begin
+        else
+        begin
             if(!stop) begin
                 if(PC[2]==0) begin
                     if((br_flag_pre&br_flag1)|jump_flag1)
@@ -67,7 +68,8 @@ module IF(
                     else 
                         NPC<=PC+8;
                 end
-                else begin//第一条指令不执行
+                else
+                begin//第一条指令不执行
                     if((br_flag_pre & br_flag2)|jump_flag2)
                         NPC<=br_address2;
                     else 
@@ -107,10 +109,11 @@ module IF(
         if(PC[2]==1'b1)
             if((br_flag_pre & br_flag2)|jump_flag2)//只执行第二条指令且发生跳转
             begin
-                npc1<= `NPC_INITIAL;
-                npc2<=NPC;
+                npc1 <= `NPC_INITIAL;
+                //npc2<=NPC;
+                npc2 <= br_address2; 
             end
-            else 
+            else
             begin
                 npc1<= `NPC_INITIAL;
                 npc2<=PC+4;
@@ -118,13 +121,15 @@ module IF(
         else
             if((br_flag_pre & br_flag1)|jump_flag1)//第一条指令发生跳转
             begin
-                npc1<=NPC;
+                //npc1<=NPC;
+                npc1 <= br_address1;
                 npc2<= `NPC_INITIAL;
             end
             else if((br_flag_pre & br_flag2)|jump_flag2)
             begin
                 npc1<=PC+4;
-                npc2<=NPC;
+                //npc2<=NPC;
+                npc2 <= br_address2;
             end
             else
             begin
@@ -158,12 +163,14 @@ module MINI_DECODE(
     //reg [`PC_BUS] br_address;
     always@(*)
     begin
-        if(inst[6:0]==7'b1100011) begin//btype
+        if(inst[6:0]==7'b1100011)
+        begin//btype
             br_flag<=1'b1;
             jump_flag<=1'b0;
             br_address<=PC+{{{32-13}{inst[31]}},{inst[31],inst[7],inst[30:25],inst[11:8]}, 1'b0};
         end
-        else if(inst[6:0]==7'b1101111) begin//jal
+        else if(inst[6:0]==7'b1101111)
+        begin//jal
             br_flag<=1'b0;
             jump_flag<=1'b1;
             br_address<=PC+{{{32-21}{inst[31]}},{inst[31],inst[19:12],inst[20],inst[30:21]}, 1'b0};
@@ -189,10 +196,11 @@ module BRANCH_PREDICT(
 );
 
     reg [1:0] br_pre;
-    initial br_pre =2'b01;
-    always@(posedge clk)
+    initial br_pre =2'b00;
+    /*always@(posedge clk)
     begin
-        if(isbranch_pre) begin
+        if(isbranch_pre)
+        begin
             if(branch_flag) begin
                 if(br_pre==2'b00)
                     br_pre=2'b01;
@@ -214,7 +222,20 @@ module BRANCH_PREDICT(
                     br_pre=2'b10;
             end
         end
-    end
-    //assign br_flag_pre=br_pre[1];
-    assign br_flag_pre = 1'b0;//TODO:此时为测试用
+    end*/
+    always @ (posedge clk)
+    if(isbranch_pre)
+    case ({branch_flag,br_pre})
+        3'b000: br_pre <= 2'b00;
+        3'b001: br_pre <= 2'b00;
+        3'b010: br_pre <= 2'b01;
+        3'b011: br_pre <= 2'b11;
+        3'b100: br_pre <= 2'b01;
+        3'b101: br_pre <= 2'b10;
+        3'b110: br_pre <= 2'b11;
+        3'b111: br_pre <= 2'b11;
+    endcase
+
+    assign br_flag_pre=br_pre[1];
+    //assign br_flag_pre = 1'b0;//TODO:此时为测试用
 endmodule
