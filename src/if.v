@@ -236,6 +236,6 @@ module BRANCH_PREDICT(
         3'b111: br_pre <= 2'b11;
     endcase
 
-    assign br_flag_pre=br_pre[1];
-    //assign br_flag_pre = 1'b0;//TODO:此时为测试用
+    //assign br_flag_pre=br_pre[1];
+    assign br_flag_pre = 1'b0;//TODO:此时为测试用
 endmodule
