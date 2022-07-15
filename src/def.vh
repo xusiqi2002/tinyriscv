@@ -18,6 +18,8 @@
 
 `define ENABLE 1'b1
 `define DISABLE 1'b0
+`define VALID 1'b1
+`define INVALID 1'b0
 
 `define RFW_BUS 38:0
 `define RFW_LEN 38
@@ -38,12 +40,13 @@
 
 
 //instbuf 
-`define INSTBUF_BUS
-`define INSTBUF_LEN
-`define IB_PC
-`define IB_NPC
-`define IB_INST
-`define IB_INITIAL {`PC_INITIAL,`NPC_INITIAL,`INST_INITIAL}
+`define INSTBUF_BUS 96:0
+`define INSTBUF_LEN 97
+`define IB_V 96
+`define IB_INST 95:64
+`define IB_PC 63:32
+`define IB_NPC 31:0
+`define IB_INITIAL {`INVALID,`INST_INITIAL,`PC_INITIAL,`NPC_INITIAL}
 
 //decode
 `define DECODEOUT_BUS 66:0
