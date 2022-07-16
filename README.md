@@ -1,5 +1,5 @@
 # tinyriscv
-一个支持37条riscv指令顺序双发射cpu
+一个支持37条riscv指令顺序双发射scpu
 
 
 与高元飞( @ GS9005) 合作完成
